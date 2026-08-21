@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
 	"github.com/alazar/rssagg/internal/database"
 	"github.com/google/uuid"
 )
@@ -36,6 +37,15 @@ func (apiCfg *apiConfig) handlerCreateFeedFollows(w http.ResponseWriter, r *http
 		return
 	}
 
-	respondWithJSON(w, 201, databaseFeedFollowToFollow(feed))
+	respondWithJSON(w, 201, databaseFeedFollowToFeedFollow(feed))
 }
 
+func (apiCfg *apiConfig) handlerGetFeedFollows(w http.ResponseWriter, r *http.Request, user database.User) {
+	feedFollows, err := apiCfg.DB.GetFeedFollows(r.Context(), user.ID);
+
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("Coudn't get feedFollows: %v", err))
+		return
+	}
+	respondWithJSON(w, 201, databaseFeedFollowsToFeedFollows(feedFollows))
+}

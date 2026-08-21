@@ -15,3 +15,6 @@ VALUES (
     $5
 )
 RETURNING *;
+
+-- name: GetFeedFollows :many
+SELECT * from feeds_follows WHERE user_id=$1;
